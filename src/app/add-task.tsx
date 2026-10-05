@@ -1,4 +1,5 @@
 import { router } from 'expo-router';
+import { useColorScheme } from 'nativewind';
 import { useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -6,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { getTaskDatabase, type Priority } from '@/db/tasks';
 
 export default function AddTaskScreen() {
+  const { colorScheme } = useColorScheme();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState<Priority | null>(null);
@@ -49,37 +51,39 @@ export default function AddTaskScreen() {
   }
 
   return (
-    <View className="flex-1 bg-slate-50">
+    <View className="flex-1 bg-slate-50 dark:bg-slate-950">
       <SafeAreaView style={{ flex: 1 }} edges={['top', 'left', 'right']}>
         <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
           <ScrollView contentContainerClassName="p-6 pb-12" keyboardShouldPersistTaps="handled">
             <View className="mx-auto w-full max-w-2xl gap-6">
               <View className="gap-2">
-                <Text accessibilityRole="header" className="text-3xl font-bold text-slate-900">
+                <Text accessibilityRole="header" className="text-3xl font-bold text-slate-900 dark:text-slate-100">
                   Add Task
                 </Text>
-                <Text className="text-base text-slate-600">A place for your next task.</Text>
+                <Text className="text-base text-slate-600 dark:text-slate-300">A place for your next task.</Text>
               </View>
-              <View className="gap-4 rounded-xl border border-slate-200 bg-white p-6">
+              <View className="gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6">
                 <View className="gap-2">
-                  <Text className="text-base font-semibold text-slate-900">Title (required)</Text>
+                  <Text className="text-base font-semibold text-slate-900 dark:text-slate-100">Title (required)</Text>
                   <TextInput
                     accessibilityLabel="Title (required)"
-                    className="min-h-12 rounded-lg border border-slate-300 bg-white px-3 py-3 text-base text-slate-900"
+                    className="min-h-12 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-3 text-base text-slate-900 dark:text-slate-100"
                     placeholder="What needs to be done?"
-                    placeholderTextColor="#64748b"
+                    placeholderTextColor={colorScheme === 'dark' ? '#94a3b8' : '#64748b'}
+                    keyboardAppearance={colorScheme === 'dark' ? 'dark' : 'light'}
                     value={title}
                     onChangeText={setTitle}
                     editable={!saving}
                   />
                 </View>
                 <View className="gap-2">
-                  <Text className="text-base font-semibold text-slate-900">Description (optional)</Text>
+                  <Text className="text-base font-semibold text-slate-900 dark:text-slate-100">Description (optional)</Text>
                   <TextInput
                     accessibilityLabel="Description (optional)"
-                    className="min-h-28 rounded-lg border border-slate-300 bg-white px-3 py-3 text-base text-slate-900"
+                    className="min-h-28 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 py-3 text-base text-slate-900 dark:text-slate-100"
                     placeholder="Add any details"
-                    placeholderTextColor="#64748b"
+                    placeholderTextColor={colorScheme === 'dark' ? '#94a3b8' : '#64748b'}
+                    keyboardAppearance={colorScheme === 'dark' ? 'dark' : 'light'}
                     multiline
                     textAlignVertical="top"
                     value={description}
@@ -88,7 +92,7 @@ export default function AddTaskScreen() {
                   />
                 </View>
                 <View className="gap-2">
-                  <Text className="text-base font-semibold text-slate-900">Priority (required)</Text>
+                  <Text className="text-base font-semibold text-slate-900 dark:text-slate-100">Priority (required)</Text>
                   <View className="flex-row flex-wrap gap-2" accessibilityRole="radiogroup">
                     {(['High', 'Medium', 'Low'] as const).map((option) => (
                       <Pressable
@@ -99,15 +103,15 @@ export default function AddTaskScreen() {
                         onPress={() => setPriority(option)}
                         className={priority === option
                           ? 'min-h-12 justify-center rounded-lg border border-blue-700 bg-blue-700 px-4 py-3'
-                          : 'min-h-12 justify-center rounded-lg border border-slate-300 bg-white px-4 py-3'}>
-                        <Text className={priority === option ? 'text-base font-semibold text-white' : 'text-base text-slate-700'}>
+                          : 'min-h-12 justify-center rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-4 py-3'}>
+                        <Text className={priority === option ? 'text-base font-semibold text-white' : 'text-base text-slate-700 dark:text-slate-200'}>
                           {option}
                         </Text>
                       </Pressable>
                     ))}
                   </View>
                 </View>
-                {error && <Text accessibilityRole="alert" className="text-base text-red-700">{error}</Text>}
+                {error && <Text accessibilityRole="alert" className="text-base text-red-700 dark:text-red-300">{error}</Text>}
                 <Pressable
                   accessibilityRole="button"
                   accessibilityState={{ disabled: saving, busy: saving }}

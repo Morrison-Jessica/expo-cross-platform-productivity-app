@@ -13,10 +13,12 @@ import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
 import { MaxContentWidth, Spacing } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 export default function AppTabs() {
+  const theme = useTheme();
   return (
-    <Tabs style={{ flex: 1 }}>
+    <Tabs style={{ flex: 1, backgroundColor: theme.background }}>
       <TabList asChild>
         <CustomTabList>
           <TabTrigger name="home" href="/" asChild>

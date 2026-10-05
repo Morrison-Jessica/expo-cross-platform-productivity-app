@@ -6,9 +6,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { getTaskDatabase, type Task } from '@/db/tasks';
 
 const priorityColors = {
-  High: 'bg-red-100 text-red-800',
-  Medium: 'bg-amber-100 text-amber-800',
-  Low: 'bg-green-100 text-green-800',
+  High: 'bg-red-100 dark:bg-red-950 text-red-800 dark:text-red-200',
+  Medium: 'bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-200',
+  Low: 'bg-green-100 dark:bg-green-950 text-green-800 dark:text-green-200',
 };
 
 export default function HomeScreen() {
@@ -87,18 +87,18 @@ export default function HomeScreen() {
   }
 
   return (
-    <View className="flex-1 bg-slate-50">
+    <View className="flex-1 bg-slate-50 dark:bg-slate-950">
       <SafeAreaView style={{ flex: 1 }} edges={['top', 'left', 'right']}>
         <ScrollView contentContainerClassName="p-6 pb-12">
           <View className="mx-auto w-full max-w-2xl gap-6">
             <View className="gap-2">
-              <Text accessibilityRole="header" className="text-3xl font-bold text-slate-900">
+              <Text accessibilityRole="header" className="text-3xl font-bold text-slate-900 dark:text-slate-100">
                 Home / Tasks
               </Text>
-              <Text className="text-base text-slate-600">Your tasks, all in one place.</Text>
+              <Text className="text-base text-slate-600 dark:text-slate-300">Your tasks, all in one place.</Text>
             </View>
             {!loading && !error && (
-              <Text accessibilityLiveRegion="polite" className="text-base font-semibold text-slate-700">
+              <Text accessibilityLiveRegion="polite" className="text-base font-semibold text-slate-700 dark:text-slate-200">
                 Total tasks: {tasks.length} · Completed tasks: {completedCount}
               </Text>
             )}
@@ -112,40 +112,40 @@ export default function HomeScreen() {
                   onPress={() => { setFilter(option); setDeleteId(null); }}
                   className={filter === option
                     ? 'min-h-12 justify-center rounded-lg bg-blue-700 px-4 py-3'
-                    : 'min-h-12 justify-center rounded-lg border border-slate-300 bg-white px-4 py-3'}>
-                  <Text className={filter === option ? 'text-base font-semibold text-white' : 'text-base text-slate-700'}>
+                    : 'min-h-12 justify-center rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-4 py-3'}>
+                  <Text className={filter === option ? 'text-base font-semibold text-white' : 'text-base text-slate-700 dark:text-slate-200'}>
                     {option}
                   </Text>
                 </Pressable>
               ))}
             </View>
-            {actionError && <Text accessibilityRole="alert" className="text-base text-red-700">{actionError}</Text>}
-            {busy && <Text accessibilityLiveRegion="polite" className="text-base text-slate-600">Saving change…</Text>}
+            {actionError && <Text accessibilityRole="alert" className="text-base text-red-700 dark:text-red-300">{actionError}</Text>}
+            {busy && <Text accessibilityLiveRegion="polite" className="text-base text-slate-600 dark:text-slate-300">Saving change…</Text>}
             {loading ? (
-              <Text className="text-base text-slate-600">Loading tasks…</Text>
+              <Text className="text-base text-slate-600 dark:text-slate-300">Loading tasks…</Text>
             ) : error ? (
-              <Text accessibilityRole="alert" className="text-base text-red-700">{error}</Text>
+              <Text accessibilityRole="alert" className="text-base text-red-700 dark:text-red-300">{error}</Text>
             ) : visibleTasks.length === 0 ? (
-              <View className="gap-2 rounded-xl border border-slate-200 bg-white p-6">
-                <Text className="text-lg font-semibold text-slate-900">
+              <View className="gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6">
+                <Text className="text-lg font-semibold text-slate-900 dark:text-slate-100">
                   {tasks.length === 0 ? 'No tasks yet' : `No ${filter.toLowerCase()} tasks`}
                 </Text>
-                <Text className="text-base leading-6 text-slate-600">
+                <Text className="text-base leading-6 text-slate-600 dark:text-slate-300">
                   {tasks.length === 0 ? 'Use the Add Task tab to create your first task.' : 'Choose another filter to see your other tasks.'}
                 </Text>
               </View>
             ) : visibleTasks.map((task) => (
-              <View key={task.id} className="gap-3 rounded-xl border border-slate-200 bg-white p-6">
-                <Text className={task.completed === 1 ? 'text-lg font-semibold text-slate-500 line-through' : 'text-lg font-semibold text-slate-900'}>
+              <View key={task.id} className="gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6">
+                <Text className={task.completed === 1 ? 'text-lg font-semibold text-slate-500 dark:text-slate-400 line-through' : 'text-lg font-semibold text-slate-900 dark:text-slate-100'}>
                   {task.title}
                 </Text>
-                <Text className="text-sm font-semibold text-slate-600">
+                <Text className="text-sm font-semibold text-slate-600 dark:text-slate-300">
                   {task.completed === 1 ? 'Completed' : 'Active'}
                 </Text>
                 <Text className={`self-start rounded-full px-3 py-1 text-sm font-semibold ${priorityColors[task.priority]}`}>
                   {task.priority} priority
                 </Text>
-                {task.description ? <Text className="text-base leading-6 text-slate-600">{task.description}</Text> : null}
+                {task.description ? <Text className="text-base leading-6 text-slate-600 dark:text-slate-300">{task.description}</Text> : null}
                 <View className="flex-row flex-wrap gap-3">
                   <Pressable
                     accessibilityRole="checkbox"
@@ -153,8 +153,8 @@ export default function HomeScreen() {
                     accessibilityState={{ checked: task.completed === 1, disabled: busy }}
                     disabled={busy}
                     onPress={() => updateTask(task, 'toggle')}
-                    className="min-h-12 justify-center rounded-lg border border-slate-300 px-4 py-3">
-                    <Text className="text-base font-semibold text-slate-700">
+                    className="min-h-12 justify-center rounded-lg border border-slate-300 dark:border-slate-600 px-4 py-3">
+                    <Text className="text-base font-semibold text-slate-700 dark:text-slate-200">
                       {task.completed === 1 ? 'Mark incomplete' : 'Mark complete'}
                     </Text>
                   </Pressable>
@@ -164,13 +164,13 @@ export default function HomeScreen() {
                     accessibilityState={{ disabled: busy }}
                     disabled={busy}
                     onPress={() => { setDeleteId(task.id); setActionError(null); }}
-                    className="min-h-12 justify-center rounded-lg border border-red-300 px-4 py-3">
-                    <Text className="text-base font-semibold text-red-700">Delete</Text>
+                    className="min-h-12 justify-center rounded-lg border border-red-300 dark:border-red-700 px-4 py-3">
+                    <Text className="text-base font-semibold text-red-700 dark:text-red-300">Delete</Text>
                   </Pressable>
                 </View>
                 {deleteId === task.id && (
-                  <View className="gap-3 rounded-lg border border-red-200 bg-red-50 p-4">
-                    <Text accessibilityRole="alert" className="text-base text-red-900">
+                  <View className="gap-3 rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950 p-4">
+                    <Text accessibilityRole="alert" className="text-base text-red-900 dark:text-red-100">
                       Delete “{task.title}”? This cannot be undone.
                     </Text>
                     <View className="flex-row flex-wrap gap-3">
@@ -179,8 +179,8 @@ export default function HomeScreen() {
                         accessibilityState={{ disabled: busy }}
                         disabled={busy}
                         onPress={() => setDeleteId(null)}
-                        className="min-h-12 justify-center rounded-lg border border-slate-300 bg-white px-4 py-3">
-                        <Text className="text-base text-slate-700">Cancel</Text>
+                        className="min-h-12 justify-center rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-4 py-3">
+                        <Text className="text-base text-slate-700 dark:text-slate-200">Cancel</Text>
                       </Pressable>
                       <Pressable
                         accessibilityRole="button"
